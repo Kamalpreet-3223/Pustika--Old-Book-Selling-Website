@@ -1,0 +1,13 @@
+Werkzeug==0.16.0
+blinker
+Click
+Flask
+Flask-Mail
+Flask-Uploads
+itsdangerous
+Jinja2
+MarkupSafe
+passlib
+WTForms
+email-validator
+mysql-connector-python
