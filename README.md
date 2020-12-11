@@ -61,18 +61,6 @@ On Request Of Several People I am bringing photos of this website, So as to quen
  - **Buy/Sell products using platform.**
  - *Added search bar to search for books!*
  - **You can place order for books giving your phone no and address.**
- 
- 
- 
- 
- 
- ### Tech
-
-पुस्तिका uses these source projects to work properly:
-
-* [menshut](https://github.com/mohsinenur/menshut) - Basic flask template for selling goods.
-
-And of course पुस्तिका itself is open source with a [public repository](https://github.com/hari01584/Pustika-Eclipse-Hackathon/) on GitHub.
 
 
 
@@ -102,7 +90,7 @@ GPLv3
 [//]: # (These are reference links used in the body of this note and get stripped out when the markdown processor does its job. There is no need to format nicely because it shouldn't be seen. Thanks SO - http://stackoverflow.com/questions/4823468/store-comments-in-markdown-syntax)
 
 
-   [dill]: <https://github.com/hari01584/r>
+   [dill]: <https://github.com/Kamalpreet-3223/r>
  
    [PlDb]: <https://github.com/joemccann/dillinger/tree/master/plugins/dropbox/README.md>
    [PlGh]: <https://github.com/joemccann/dillinger/tree/master/plugins/github/README.md>
