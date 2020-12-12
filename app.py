@@ -1,6 +1,6 @@
 from flask import Flask, render_template, flash, redirect, url_for, session, request, logging, send_file
 #import pymysql
-#pymysql.install_as_MySQLdb()
+# pymysql.install_as_MySQLdb()
 #from flask_mysqldb import MySQL
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators, SelectField
 from passlib.hash import sha256_crypt
@@ -15,7 +15,7 @@ from wtforms.fields.html5 import EmailField
 import mysql.connector
 
 #import pymysql
-#pymysql.install_as_MySQLdb()
+# pymysql.install_as_MySQLdb()
 
 
 app = Flask(__name__)
@@ -35,16 +35,15 @@ configure_uploads(app, photos)
 #app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 
 
-
 mysql = mysql.connector.connect(
-  host="127.0.0.1",
-  user="root",
-  password="",
-  database="pustika-bucket"
+    host="127.0.0.1",
+    user="root",
+    password="",
+    database="pustika-bucket"
 )
 
 # Initialize the app for use with this MySQL class
-#mysql.init_app(app)
+# mysql.init_app(app)
 
 
 def is_logged_in(f):
@@ -100,20 +99,24 @@ def wrappers(func, *args, **kwargs):
 
 def content_based_filtering(product_id):
     cur = mysql.cursor(dictionary=True)
-    cur.execute("SELECT * FROM products WHERE id=%s", (product_id,))  # getting id row
+    cur.execute("SELECT * FROM products WHERE id=%s",
+                (product_id,))  # getting id row
     data = cur.fetchone()  # get row info
     data_cat = data['category']  # get id category ex shirt
     print('Showing result for Product Id: ' + product_id)
-    category_matched = cur.execute("SELECT * FROM products WHERE category=%s", (data_cat,))  # get all shirt category
+    category_matched = cur.execute(
+        "SELECT * FROM products WHERE category=%s", (data_cat,))  # get all shirt category
     print('Total product matched: ' + str(category_matched))
     cat_product = cur.fetchall()  # get all row
-    cur.execute("SELECT * FROM product_level WHERE product_id=%s", (product_id,))  # id level info
+    cur.execute("SELECT * FROM product_level WHERE product_id=%s",
+                (product_id,))  # id level info
     id_level = cur.fetchone()
     recommend_id = []
     cate_level = ['v_shape', 'polo', 'clean_text', 'design', 'leather', 'color', 'formal', 'converse', 'loafer', 'hook',
                   'chain']
     for product_f in cat_product:
-        cur.execute("SELECT * FROM product_level WHERE product_id=%s", (product_f['id'],))
+        cur.execute(
+            "SELECT * FROM product_level WHERE product_id=%s", (product_f['id'],))
         f_level = cur.fetchone()
         match_score = 0
         if f_level['product_id'] != int(product_id):
@@ -138,51 +141,55 @@ def content_based_filtering(product_id):
 def index():
     form = OrderForm(request.form)
     # Create cursor
-    cur = mysql.cursor(buffered=True,dictionary=True)
+    cur = mysql.cursor(buffered=True, dictionary=True)
     # Get message
     values = 'sub01'
-    cur.execute("SELECT * FROM products WHERE category=%s ORDER BY RAND() LIMIT 4", (values,))
+    cur.execute(
+        "SELECT * FROM products WHERE category=%s ORDER BY RAND() LIMIT 4", (values,))
     sub01 = cur.fetchall()
     values = 'sub02'
-    cur.execute("SELECT * FROM products WHERE category=%s ORDER BY RAND() LIMIT 4", (values,))
+    cur.execute(
+        "SELECT * FROM products WHERE category=%s ORDER BY RAND() LIMIT 4", (values,))
     sub02 = cur.fetchall()
     values = 'sub03'
-    cur.execute("SELECT * FROM products WHERE category=%s ORDER BY RAND() LIMIT 4", (values,))
+    cur.execute(
+        "SELECT * FROM products WHERE category=%s ORDER BY RAND() LIMIT 4", (values,))
     sub03 = cur.fetchall()
     values = 'sub04'
-    cur.execute("SELECT * FROM products WHERE category=%s ORDER BY RAND() LIMIT 4", (values,))
+    cur.execute(
+        "SELECT * FROM products WHERE category=%s ORDER BY RAND() LIMIT 4", (values,))
     sub04 = cur.fetchall()
-
 
     #TODO: MULTIPLICATE
     values = 'sub05'
-    cur.execute("SELECT * FROM products WHERE category=%s ORDER BY RAND() LIMIT 4", (values,))
+    cur.execute(
+        "SELECT * FROM products WHERE category=%s ORDER BY RAND() LIMIT 4", (values,))
     sub05 = cur.fetchall()
     #TODO: MULTIPLICATE
 
     values = 'sub06'
-    cur.execute("SELECT * FROM products WHERE category=%s ORDER BY RAND() LIMIT 4", (values,))
+    cur.execute(
+        "SELECT * FROM products WHERE category=%s ORDER BY RAND() LIMIT 4", (values,))
     sub06 = cur.fetchall()
 
-
     values = 'sub07'
-    cur.execute("SELECT * FROM products WHERE category=%s ORDER BY RAND() LIMIT 4", (values,))
+    cur.execute(
+        "SELECT * FROM products WHERE category=%s ORDER BY RAND() LIMIT 4", (values,))
     sub07 = cur.fetchall()
 
-
-
     values = 'sub08'
-    cur.execute("SELECT * FROM products WHERE category=%s ORDER BY RAND() LIMIT 4", (values,))
+    cur.execute(
+        "SELECT * FROM products WHERE category=%s ORDER BY RAND() LIMIT 4", (values,))
     sub08 = cur.fetchall()
 
-
     values = 'sub09'
-    cur.execute("SELECT * FROM products WHERE category=%s ORDER BY RAND() LIMIT 4", (values,))
+    cur.execute(
+        "SELECT * FROM products WHERE category=%s ORDER BY RAND() LIMIT 4", (values,))
     sub09 = cur.fetchall()
 
     # Close Connection
     cur.close()
-    return render_template('home.html', sub01=sub01, sub02=sub02, sub03=sub03, sub04=sub04,sub05=sub05,sub06=sub06,sub07=sub07,sub08=sub08,sub09=sub09, form=form)
+    return render_template('home.html', sub01=sub01, sub02=sub02, sub03=sub03, sub04=sub04, sub05=sub05, sub06=sub06, sub07=sub07, sub08=sub08, sub09=sub09, form=form)
 
 
 class LoginForm(Form):  # Create Login Form
@@ -199,7 +206,6 @@ def about():
     return render_template('about.html')
 
 
-
 # User Login
 @app.route('/login', methods=['GET', 'POST'])
 @not_logged_in
@@ -212,11 +218,12 @@ def login():
         password_candidate = form.password.data
 
         # Create cursor
-        
-        cur = mysql.cursor(buffered=True,dictionary=True)
+
+        cur = mysql.cursor(buffered=True, dictionary=True)
 
         # Get user by username
-        result = cur.execute("SELECT * FROM users WHERE username=%s", [username])
+        result = cur.execute(
+            "SELECT * FROM users WHERE username=%s", [username])
         data = cur.fetchone()
         if data:
             # Get stored value
@@ -264,12 +271,14 @@ def logout():
 class RegisterForm(Form):
     name = StringField('', [validators.length(min=3, max=50)],
                        render_kw={'autofocus': True, 'placeholder': 'Full Name'})
-    username = StringField('', [validators.length(min=3, max=25)], render_kw={'placeholder': 'Username'})
+    username = StringField('', [validators.length(min=3, max=25)], render_kw={
+                           'placeholder': 'Username'})
     email = EmailField('', [validators.DataRequired(), validators.Email(), validators.length(min=4, max=25)],
                        render_kw={'placeholder': 'Email'})
     password = PasswordField('', [validators.length(min=3)],
                              render_kw={'placeholder': 'Password'})
-    mobile = StringField('', [validators.length(min=11, max=15)], render_kw={'placeholder': 'Mobile'})
+    mobile = StringField('', [validators.length(min=11, max=15)], render_kw={
+                         'placeholder': 'Mobile'})
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -301,7 +310,8 @@ def register():
 
 
 class MessageForm(Form):  # Create Message Form
-    body = StringField('', [validators.length(min=1)], render_kw={'autofocus': True})
+    body = StringField('', [validators.length(min=1)],
+                       render_kw={'autofocus': True})
 
 
 @app.route('/chatting/<string:id>', methods=['GET', 'POST'])
@@ -377,7 +387,8 @@ def sub01():
     cur = mysql.cursor(dictionary=True)
     # Get message
     values = 'sub01'
-    cur.execute("SELECT * FROM products WHERE category=%s ORDER BY id ASC", (values,))
+    cur.execute(
+        "SELECT * FROM products WHERE category=%s ORDER BY id ASC", (values,))
     products = cur.fetchall()
 
     # Close Connection
@@ -410,8 +421,8 @@ def sub01():
         cur.close()
 
         flash('Order successful', 'success')
-        path = 'D:/files/billy.jpg'
-        return send_file ( path, mimetype='image/jpg', as_attachment=True)
+        path = './static/thanks.jpeg'
+        return send_file(path, mimetype='image/jpg', as_attachment=True)
     if 'view' in request.args:
         product_id = request.args['view']
         curso = mysql.cursor(dictionary=True)
@@ -425,7 +436,8 @@ def sub01():
             uid = session['uid']
             # Create cursor
             cur = mysql.cursor(dictionary=True)
-            cur.execute("SELECT * FROM product_view WHERE user_id=%s AND product_id=%s", (uid, product_id))
+            cur.execute(
+                "SELECT * FROM product_view WHERE user_id=%s AND product_id=%s", (uid, product_id))
             result = cur.fetchall()
             if result:
                 now = datetime.datetime.now()
@@ -433,7 +445,8 @@ def sub01():
                 cur.execute("UPDATE product_view SET date=%s WHERE user_id=%s AND product_id=%s",
                             (now_time, uid, product_id))
             else:
-                cur.execute("INSERT INTO product_view(user_id, product_id) VALUES(%s, %s)", (uid, product_id))
+                cur.execute(
+                    "INSERT INTO product_view(user_id, product_id) VALUES(%s, %s)", (uid, product_id))
                 mysql.commit()
         return render_template('view_product.html', x=x, tshirts=product)
     elif 'order' in request.args:
@@ -453,7 +466,8 @@ def sub02():
     cur = mysql.cursor(dictionary=True)
     # Get message
     values = 'sub02'
-    cur.execute("SELECT * FROM products WHERE category=%s ORDER BY id ASC", (values,))
+    cur.execute(
+        "SELECT * FROM products WHERE category=%s ORDER BY id ASC", (values,))
     products = cur.fetchall()
     # Close Connection
     cur.close()
@@ -486,8 +500,8 @@ def sub02():
         cur.close()
 
         flash('Order successful', 'success')
-        path = 'D:/files/billy.jpg'
-        return send_file ( path, mimetype='image/jpg', as_attachment=True)
+        path = './static/thanks.jpeg'
+        return send_file(path, mimetype='image/jpg', as_attachment=True)
     if 'view' in request.args:
         q = request.args['view']
         product_id = q
@@ -513,7 +527,8 @@ def sub03():
     cur = mysql.cursor(dictionary=True)
     # Get message
     values = 'sub03'
-    cur.execute("SELECT * FROM products WHERE category=%s ORDER BY id ASC", (values,))
+    cur.execute(
+        "SELECT * FROM products WHERE category=%s ORDER BY id ASC", (values,))
     products = cur.fetchall()
     # Close Connection
     cur.close()
@@ -547,8 +562,8 @@ def sub03():
         cur.close()
 
         flash('Order successful', 'success')
-        path = 'D:/files/billy.jpg'
-        return send_file ( path, mimetype='image/jpg', as_attachment=True)
+        path = './static/thanks.jpeg'
+        return send_file(path, mimetype='image/jpg', as_attachment=True)
     if 'view' in request.args:
         q = request.args['view']
         product_id = q
@@ -574,7 +589,8 @@ def sub04():
     cur = mysql.cursor(dictionary=True)
     # Get message
     values = 'sub04'
-    cur.execute("SELECT * FROM products WHERE category=%s ORDER BY id ASC", (values,))
+    cur.execute(
+        "SELECT * FROM products WHERE category=%s ORDER BY id ASC", (values,))
     products = cur.fetchall()
     # Close Connection
     cur.close()
@@ -606,8 +622,8 @@ def sub04():
         cur.close()
 
         flash('Order successful', 'success')
-        path = 'D:/files/billy.jpg'
-        return send_file ( path, mimetype='image/jpg', as_attachment=True)
+        path = './static/thanks.jpeg'
+        return send_file(path, mimetype='image/jpg', as_attachment=True)
     if 'view' in request.args:
         q = request.args['view']
         product_id = q
@@ -626,6 +642,8 @@ def sub04():
     return render_template('sub04.html', sub04=products, form=form)
 
 #TODO: DUPLICATE
+
+
 @app.route('/sub05', methods=['GET', 'POST'])
 def sub05():
     form = OrderForm(request.form)
@@ -633,7 +651,8 @@ def sub05():
     cur = mysql.cursor(dictionary=True)
     # Get message
     values = 'sub05'
-    cur.execute("SELECT * FROM products WHERE category=%s ORDER BY id ASC", (values,))
+    cur.execute(
+        "SELECT * FROM products WHERE category=%s ORDER BY id ASC", (values,))
     products = cur.fetchall()
     # Close Connection
     cur.close()
@@ -665,8 +684,8 @@ def sub05():
         cur.close()
 
         flash('Order successful', 'success')
-        path = 'D:/files/billy.jpg'
-        return send_file ( path, mimetype='image/jpg', as_attachment=True)
+        path = './static/thanks.jpeg'
+        return send_file(path, mimetype='image/jpg', as_attachment=True)
     if 'view' in request.args:
         q = request.args['view']
         product_id = q
@@ -695,7 +714,8 @@ def sub06():
     cur = mysql.cursor(dictionary=True)
     # Get message
     values = 'sub06'
-    cur.execute("SELECT * FROM products WHERE category=%s ORDER BY id ASC", (values,))
+    cur.execute(
+        "SELECT * FROM products WHERE category=%s ORDER BY id ASC", (values,))
     products = cur.fetchall()
 
     # Close Connection
@@ -728,8 +748,8 @@ def sub06():
         cur.close()
 
         flash('Order successful', 'success')
-        path = 'D:/files/billy.jpg'
-        return send_file ( path, mimetype='image/jpg', as_attachment=True)
+        path = './static/thanks.jpeg'
+        return send_file(path, mimetype='image/jpg', as_attachment=True)
     if 'view' in request.args:
         q = request.args['view']
         product_id = q
@@ -748,7 +768,6 @@ def sub06():
     return render_template('sub06.html', sub06=products, form=form)
 
 
-
 @app.route('/sub07', methods=['GET', 'POST'])
 def sub07():
     form = OrderForm(request.form)
@@ -756,7 +775,8 @@ def sub07():
     cur = mysql.cursor(dictionary=True)
     # Get message
     values = 'sub07'
-    cur.execute("SELECT * FROM products WHERE category=%s ORDER BY id ASC", (values,))
+    cur.execute(
+        "SELECT * FROM products WHERE category=%s ORDER BY id ASC", (values,))
     products = cur.fetchall()
     # Close Connection
     cur.close()
@@ -788,8 +808,8 @@ def sub07():
         cur.close()
 
         flash('Order successful', 'success')
-        path = 'D:/files/billy.jpg'
-        return send_file ( path, mimetype='image/jpg', as_attachment=True)
+        path = './static/thanks.jpeg'
+        return send_file(path, mimetype='image/jpg', as_attachment=True)
     if 'view' in request.args:
         q = request.args['view']
         product_id = q
@@ -808,7 +828,6 @@ def sub07():
     return render_template('sub07.html', sub07=products, form=form)
 
 
-
 @app.route('/sub08', methods=['GET', 'POST'])
 def sub08():
     form = OrderForm(request.form)
@@ -816,7 +835,8 @@ def sub08():
     cur = mysql.cursor(dictionary=True)
     # Get message
     values = 'sub08'
-    cur.execute("SELECT * FROM products WHERE category=%s ORDER BY id ASC", (values,))
+    cur.execute(
+        "SELECT * FROM products WHERE category=%s ORDER BY id ASC", (values,))
     products = cur.fetchall()
     # Close Connection
     cur.close()
@@ -848,8 +868,8 @@ def sub08():
         cur.close()
 
         flash('Order successful', 'success')
-        path = 'D:/files/billy.jpg'
-        return send_file ( path, mimetype='image/jpg', as_attachment=True)
+        path = './static/thanks.jpeg'
+        return send_file(path, mimetype='image/jpg', as_attachment=True)
     if 'view' in request.args:
         q = request.args['view']
         product_id = q
@@ -868,8 +888,6 @@ def sub08():
     return render_template('sub08.html', sub08=products, form=form)
 
 
-
-
 @app.route('/sub09', methods=['GET', 'POST'])
 def sub09():
     form = OrderForm(request.form)
@@ -877,7 +895,8 @@ def sub09():
     cur = mysql.cursor(dictionary=True)
     # Get message
     values = 'sub09'
-    cur.execute("SELECT * FROM products WHERE category=%s ORDER BY id ASC", (values,))
+    cur.execute(
+        "SELECT * FROM products WHERE category=%s ORDER BY id ASC", (values,))
     products = cur.fetchall()
     # Close Connection
     cur.close()
@@ -909,8 +928,8 @@ def sub09():
         cur.close()
 
         flash('Order successful', 'success')
-        path = 'D:/files/billy.jpg'
-        return send_file ( path, mimetype='image/jpg', as_attachment=True)
+        path = './static/thanks.jpeg'
+        return send_file(path, mimetype='image/jpg', as_attachment=True)
     if 'view' in request.args:
         q = request.args['view']
         product_id = q
@@ -929,9 +948,6 @@ def sub09():
     return render_template('sub09.html', sub09=products, form=form)
 
 
-
-
-
 @app.route('/admin_login', methods=['GET', 'POST'])
 @not_admin_logged_in
 def admin_login():
@@ -946,10 +962,10 @@ def admin_login():
         # Get user by username
         result = cur.execute("SELECT * FROM admin WHERE email=%s", [username])
         data = cur.fetchone()
-        #print(*data,sep='/n')
+        # print(*data,sep='/n')
         if data:
             # Get stored value
-            
+
             password = data['password']
             uid = data['id']
             name = data['firstName']
@@ -986,7 +1002,7 @@ def admin_logout():
 @app.route('/admin')
 @is_admin_logged_in
 def admin():
-    curso = mysql.cursor(buffered=True,dictionary=True)
+    curso = mysql.cursor(buffered=True, dictionary=True)
     num_rows = curso.execute("SELECT * FROM products")
     result = curso.fetchall()
     order_rows = curso.execute("SELECT * FROM orders")
@@ -998,7 +1014,7 @@ def admin():
 @app.route('/orders')
 @is_admin_logged_in
 def orders():
-    curso = mysql.cursor(buffered=True,dictionary=True)
+    curso = mysql.cursor(buffered=True, dictionary=True)
     num_rows = curso.execute("SELECT * FROM products")
     order_rows = curso.execute("SELECT * FROM orders")
     result = curso.fetchall()
@@ -1010,7 +1026,7 @@ def orders():
 @app.route('/users')
 @is_admin_logged_in
 def users():
-    curso = mysql.cursor(buffered=True,dictionary=True)
+    curso = mysql.cursor(buffered=True, dictionary=True)
     num_rows = curso.execute("SELECT * FROM products")
     order_rows = curso.execute("SELECT * FROM orders")
     users_rows = curso.execute("SELECT * FROM users")
@@ -1045,12 +1061,14 @@ def admin_add_product():
                                  (name, price, description, available, category, item, code, picture))
                     mysql.commit()
                     product_id = curs.lastrowid
-                    curs.execute("INSERT INTO product_level(product_id)" "VALUES(%s)", [product_id])
+                    curs.execute(
+                        "INSERT INTO product_level(product_id)" "VALUES(%s)", [product_id])
                     if category == 'sub01':
                         level = request.form.getlist('sub01')
                         for lev in level:
                             yes = 'yes'
-                            query = 'UPDATE product_level SET {field}=%s WHERE product_id=%s'.format(field=lev)
+                            query = 'UPDATE product_level SET {field}=%s WHERE product_id=%s'.format(
+                                field=lev)
                             curs.execute(query, (yes, product_id))
                             # Commit cursor
                             mysql.commit()
@@ -1058,7 +1076,8 @@ def admin_add_product():
                         level = request.form.getlist('sub02')
                         for lev in level:
                             yes = 'yes'
-                            query = 'UPDATE product_level SET {field}=%s WHERE product_id=%s'.format(field=lev)
+                            query = 'UPDATE product_level SET {field}=%s WHERE product_id=%s'.format(
+                                field=lev)
                             curs.execute(query, (yes, product_id))
                             # Commit cursor
                             mysql.commit()
@@ -1066,7 +1085,8 @@ def admin_add_product():
                         level = request.form.getlist('sub03')
                         for lev in level:
                             yes = 'yes'
-                            query = 'UPDATE product_level SET {field}=%s WHERE product_id=%s'.format(field=lev)
+                            query = 'UPDATE product_level SET {field}=%s WHERE product_id=%s'.format(
+                                field=lev)
                             curs.execute(query, (yes, product_id))
                             # Commit cursor
                             mysql.commit()
@@ -1074,15 +1094,17 @@ def admin_add_product():
                         level = request.form.getlist('sub04')
                         for lev in level:
                             yes = 'yes'
-                            query = 'UPDATE product_level SET {field}=%s WHERE product_id=%s'.format(field=lev)
+                            query = 'UPDATE product_level SET {field}=%s WHERE product_id=%s'.format(
+                                field=lev)
                             curs.execute(query, (yes, product_id))
                             # Commit cursor
                             mysql.commit()
-                    elif category == 'sub04':       #TODO: DUPLICATE
+                    elif category == 'sub04':  # TODO: DUPLICATE
                         level = request.form.getlist('sub04')
                         for lev in level:
                             yes = 'yes'
-                            query = 'UPDATE product_level SET {field}=%s WHERE product_id=%s'.format(field=lev)
+                            query = 'UPDATE product_level SET {field}=%s WHERE product_id=%s'.format(
+                                field=lev)
                             curs.execute(query, (yes, product_id))
                             # Commit cursor
                             mysql.commit()
@@ -1090,7 +1112,8 @@ def admin_add_product():
                         level = request.form.getlist('sub05')
                         for lev in level:
                             yes = 'yes'
-                            query = 'UPDATE product_level SET {field}=%s WHERE product_id=%s'.format(field=lev)
+                            query = 'UPDATE product_level SET {field}=%s WHERE product_id=%s'.format(
+                                field=lev)
                             curs.execute(query, (yes, product_id))
                             # Commit cursor
                             mysql.commit()
@@ -1098,7 +1121,8 @@ def admin_add_product():
                         level = request.form.getlist('sub06')
                         for lev in level:
                             yes = 'yes'
-                            query = 'UPDATE product_level SET {field}=%s WHERE product_id=%s'.format(field=lev)
+                            query = 'UPDATE product_level SET {field}=%s WHERE product_id=%s'.format(
+                                field=lev)
                             curs.execute(query, (yes, product_id))
                             # Commit cursor
                             mysql.commit()
@@ -1106,7 +1130,8 @@ def admin_add_product():
                         level = request.form.getlist('sub07')
                         for lev in level:
                             yes = 'yes'
-                            query = 'UPDATE product_level SET {field}=%s WHERE product_id=%s'.format(field=lev)
+                            query = 'UPDATE product_level SET {field}=%s WHERE product_id=%s'.format(
+                                field=lev)
                             curs.execute(query, (yes, product_id))
                             # Commit cursor
                             mysql.commit()
@@ -1114,7 +1139,8 @@ def admin_add_product():
                         level = request.form.getlist('sub08')
                         for lev in level:
                             yes = 'yes'
-                            query = 'UPDATE product_level SET {field}=%s WHERE product_id=%s'.format(field=lev)
+                            query = 'UPDATE product_level SET {field}=%s WHERE product_id=%s'.format(
+                                field=lev)
                             curs.execute(query, (yes, product_id))
                             # Commit cursor
                             mysql.commit()
@@ -1122,7 +1148,8 @@ def admin_add_product():
                         level = request.form.getlist('sub09')
                         for lev in level:
                             yes = 'yes'
-                            query = 'UPDATE product_level SET {field}=%s WHERE product_id=%s'.format(field=lev)
+                            query = 'UPDATE product_level SET {field}=%s WHERE product_id=%s'.format(
+                                field=lev)
                             curs.execute(query, (yes, product_id))
                             # Commit cursor
                             mysql.commit()
@@ -1153,9 +1180,11 @@ def edit_product():
     if 'id' in request.args:
         product_id = request.args['id']
         curso = mysql.cursor(dictionary=True)
-        res = curso.execute("SELECT * FROM products WHERE id=%s", (product_id,))
+        res = curso.execute(
+            "SELECT * FROM products WHERE id=%s", (product_id,))
         product = curso.fetchall()
-        curso.execute("SELECT * FROM product_level WHERE product_id=%s", (product_id,))
+        curso.execute(
+            "SELECT * FROM product_level WHERE product_id=%s", (product_id,))
         product_level = curso.fetchall()
         if product:
             if request.method == 'POST':
@@ -1218,7 +1247,7 @@ def edit_product():
                                         cur.execute(query, (yes, product_id))
                                         # Commit cursor
                                         mysql.commit()
-                                elif category == 'sub05':  #TODO: DUPLICATE
+                                elif category == 'sub05':  # TODO: DUPLICATE
                                     level = request.form.getlist('sub05')
                                     for lev in level:
                                         yes = 'yes'
@@ -1263,7 +1292,7 @@ def edit_product():
                                         cur.execute(query, (yes, product_id))
                                         # Commit cursor
                                         mysql.commit()
-                                        
+
                                 else:
                                     flash('Product level not fund', 'danger')
                                     return redirect(url_for('admin_add_product'))
@@ -1322,7 +1351,8 @@ def profile():
         result = curso.fetchone()
         if result:
             if result['id'] == session['uid']:
-                curso.execute("SELECT * FROM orders WHERE uid=%s ORDER BY id ASC", (session['uid'],))
+                curso.execute(
+                    "SELECT * FROM orders WHERE uid=%s ORDER BY id ASC", (session['uid'],))
                 res = curso.fetchall()
                 return render_template('profile.html', result=res)
             else:
@@ -1343,7 +1373,8 @@ class UpdateRegisterForm(Form):
                        render_kw={'placeholder': 'Email'})
     password = PasswordField('Password', [validators.length(min=3)],
                              render_kw={'placeholder': 'Password'})
-    mobile = StringField('Mobile', [validators.length(min=11, max=15)], render_kw={'placeholder': 'Mobile'})
+    mobile = StringField('Mobile', [validators.length(
+        min=11, max=15)], render_kw={'placeholder': 'Mobile'})
 
 
 @app.route('/settings', methods=['POST', 'GET'])
