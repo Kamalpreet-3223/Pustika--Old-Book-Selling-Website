@@ -1,4 +1,4 @@
-from flask import Flask, render_template, flash, redirect, url_for, session, request, logging
+from flask import Flask, render_template, flash, redirect, url_for, session, request, logging, send_file
 #import pymysql
 #pymysql.install_as_MySQLdb()
 #from flask_mysqldb import MySQL
@@ -410,7 +410,8 @@ def sub01():
         cur.close()
 
         flash('Order successful', 'success')
-        return render_template('sub01.html', tshirt=products, form=form)
+        path = 'D:/files/billy.jpg'
+        return send_file ( path, mimetype='image/jpg', as_attachment=True)
     if 'view' in request.args:
         product_id = request.args['view']
         curso = mysql.cursor(dictionary=True)
@@ -485,7 +486,8 @@ def sub02():
         cur.close()
 
         flash('Order successful', 'success')
-        return render_template('sub02.html', sub02=products, form=form)
+        path = 'D:/files/billy.jpg'
+        return send_file ( path, mimetype='image/jpg', as_attachment=True)
     if 'view' in request.args:
         q = request.args['view']
         product_id = q
@@ -545,7 +547,8 @@ def sub03():
         cur.close()
 
         flash('Order successful', 'success')
-        return render_template('sub03.html', sub03=products, form=form)
+        path = 'D:/files/billy.jpg'
+        return send_file ( path, mimetype='image/jpg', as_attachment=True)
     if 'view' in request.args:
         q = request.args['view']
         product_id = q
@@ -603,7 +606,8 @@ def sub04():
         cur.close()
 
         flash('Order successful', 'success')
-        return render_template('sub04.html', sub04=products, form=form)
+        path = 'D:/files/billy.jpg'
+        return send_file ( path, mimetype='image/jpg', as_attachment=True)
     if 'view' in request.args:
         q = request.args['view']
         product_id = q
@@ -661,7 +665,8 @@ def sub05():
         cur.close()
 
         flash('Order successful', 'success')
-        return render_template('sub05.html', sub05=products, form=form)
+        path = 'D:/files/billy.jpg'
+        return send_file ( path, mimetype='image/jpg', as_attachment=True)
     if 'view' in request.args:
         q = request.args['view']
         product_id = q
@@ -723,7 +728,8 @@ def sub06():
         cur.close()
 
         flash('Order successful', 'success')
-        return render_template('sub06.html', sub06=products, form=form)
+        path = 'D:/files/billy.jpg'
+        return send_file ( path, mimetype='image/jpg', as_attachment=True)
     if 'view' in request.args:
         q = request.args['view']
         product_id = q
@@ -782,7 +788,8 @@ def sub07():
         cur.close()
 
         flash('Order successful', 'success')
-        return render_template('sub07.html', sub07=products, form=form)
+        path = 'D:/files/billy.jpg'
+        return send_file ( path, mimetype='image/jpg', as_attachment=True)
     if 'view' in request.args:
         q = request.args['view']
         product_id = q
@@ -841,7 +848,8 @@ def sub08():
         cur.close()
 
         flash('Order successful', 'success')
-        return render_template('sub08.html', sub08=products, form=form)
+        path = 'D:/files/billy.jpg'
+        return send_file ( path, mimetype='image/jpg', as_attachment=True)
     if 'view' in request.args:
         q = request.args['view']
         product_id = q
@@ -901,7 +909,8 @@ def sub09():
         cur.close()
 
         flash('Order successful', 'success')
-        return render_template('sub09.html', sub09=products, form=form)
+        path = 'D:/files/billy.jpg'
+        return send_file ( path, mimetype='image/jpg', as_attachment=True)
     if 'view' in request.args:
         q = request.args['view']
         product_id = q
